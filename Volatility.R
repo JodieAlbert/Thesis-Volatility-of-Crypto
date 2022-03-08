@@ -20,6 +20,12 @@ r[,r := c(NA,diff(log(price)))]
 d = r[, sd(r,na.rm=T), by = ym]
 colnames(d) <- c("ym", "VBTC")
 
+#create week
+r$yw <- format(r$date, '%Y-%V')
+
+d2 = r[, sd(r,na.rm=T), by = yw]
+colnames(d2) <- c("yw", "VBTC")
+
 ##ETHEREUM
 getSymbols("ETH-USD")
 
@@ -37,6 +43,12 @@ r.ETH[,r.ETH := c(NA,diff(log(price)))]
 
 d.ETH = r.ETH[, sd(r.ETH,na.rm=T), by = ym]
 colnames(d.ETH) <- c("ym", "VETH")
+
+r.ETH$yw <- format(r.ETH$date, '%Y-%V')
+
+d.ETH2 = r.ETH[, sd(r.ETH,na.rm=T), by = yw]
+colnames(d.ETH2) <- c("yw", "VETH")
+
 
 ##BINANCE
 getSymbols("BNB-USD")
@@ -56,6 +68,11 @@ r.BNB[,r.BNB := c(NA,diff(log(price)))]
 d.BNB = r.BNB[, sd(r.BNB,na.rm=T), by = ym]
 colnames(d.BNB) <- c("ym", "VBNB")
 
+r.BNB$yw <- format(r.BNB$date, '%Y-%V')
+
+d.BNB2 = r.BNB[, sd(r.BNB,na.rm=T), by = yw]
+colnames(d.BNB2) <- c("yw", "VBNB")
+
 ###S&P500
 getSymbols("^GSPC")
 
@@ -72,6 +89,11 @@ r.SP500[,r.SP500 := c(NA,diff(log(price)))]
 
 d.SP500 = r.SP500[, sd(r.SP500,na.rm=T), by = ym]
 colnames(d.SP500) <- c("ym", "VSP")
+
+r.SP500$yw <- format(r.SP500$date, '%Y-%V')
+
+d.SP5002 = r.SP500[, sd(r.SP500,na.rm=T), by = yw]
+colnames(d.SP5002) <- c("yw", "VSP")
 ###GOLD
 
 
@@ -80,6 +102,13 @@ Dpartial = d.BNB[d, on = .(ym)]
 D_2= d.ETH[Dpartial, on = .(ym)]
 Volatilitydata= d.SP500[D_2, on = .(ym)]
 class(as.data.frame(Volatilitydata))
+
+##MERGE 2
+Dpartial2 = d.BNB2[d, on = .(yw)]
+D_22= d.ETH2[Dpartial2, on = .(yw)]
+Volatilitydata2= d.SP5002[D_22, on = .(yw)]
+class(as.data.frame(Volatilitydata2))
+
 ##linear model 
 library(tidyverse)
 
@@ -90,5 +119,6 @@ fit3 <- lm(VETH ~ VBTC+ VBNB+ VSP, data=Volatilitydata)
 summary(fit) # show results
 summary(fit2)
 summary(fit3)
-plot(fit)
+plot(fit3)
+
 
