@@ -94,7 +94,27 @@ r.SP500$yw <- format(r.SP500$date, '%Y-%V')
 
 d.SP5002 = r.SP500[, sd(r.SP500,na.rm=T), by = yw]
 colnames(d.SP5002) <- c("yw", "VSP")
-###GOLD
+###USD
+getSymbols("DX-Y.NYB")
+
+USD= `DX-Y.NYB`[ , "DX-Y.NYB.Adjusted", drop=F]
+plot(USD$DX-Y.NYB.Adjusted)
+names(USD) = gsub("-", "_", names(USD))
+r.USD = data.frame(date = time(USD), price = as.numeric(USD$DX_Y.NYB.Adjusted))
+
+setDT(r.USD)
+
+r.USD[,ym := as.yearmon(date)]
+
+r.USD[,r.USD := c(NA,diff(log(price)))]
+
+d.USD = r.USD[, sd(r.USD,na.rm=T), by = ym]
+colnames(d.USD) <- c("ym", "VUSD")
+
+r.USD$yw <- format(r.USD$date, '%Y-%V')
+
+d.USD2 = r.USD[, sd(r.USD,na.rm=T), by = yw]
+colnames(d.USD2) <- c("yw", "VUSD")
 
 
 ##Merge
@@ -104,11 +124,16 @@ Volatilitydata= d.SP500[D_2, on = .(ym)]
 class(as.data.frame(Volatilitydata))
 
 ##MERGE 2
-Dpartial2 = d.BNB2[d, on = .(yw)]
+Dpartial2 = d.BNB2[d2, on = .(yw)]
 D_22= d.ETH2[Dpartial2, on = .(yw)]
 Volatilitydata2= d.SP5002[D_22, on = .(yw)]
 class(as.data.frame(Volatilitydata2))
 
+
+Dpartial2 = d2[d.SP5002, on = .(yw)]
+D_22= d.ETH2[Dpartial2, on = .(yw)]
+Volatilitydata2= d.BNB2[D_22, on = .(yw)]
+class(as.data.frame(Volatilitydata2))
 ##linear model 
 library(tidyverse)
 
