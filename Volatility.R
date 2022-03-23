@@ -19,6 +19,11 @@ r[,r := c(NA,diff(log(price)))]
 
 d = r[, sd(r,na.rm=T), by = ym]
 colnames(d) <- c("ym", "VBTC")
+# plot(d$VBTC, type="o")
+# plot(d$VBTC, type="o", col = "blue", xlab = "Month", ylab = "Volatility",
+#      main = "Bitcoin Volatility")
+# plot(d2$VBTC, type="o", col = "red", xlab = "Week", ylab = "Volatility",
+#      main = "Bitcoin Volatility")
 
 #create week
 r$yw <- format(r$date, '%Y-%V')

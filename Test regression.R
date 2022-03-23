@@ -141,6 +141,31 @@ lineartest3 <- lm(VBTC ~ GOLD + VUSD+ VSP+ EPU+ SYS +hits.bitcoin+ hits.VIX +hit
                   + hits.cyber + hits.gold + hits.int + hits.inflation + hits.stock
                   + hits.war, data=DF2)
 summary(lineartest3)
+summary(DF2)
+
+
+install.packages("stargazer")
+library(stargazer)
+stargazer(DF2, type = "text", title= "Table 1: Summary Statistics",
+out="table1.txt")
+
+stargazer(lineartest3, type = "text", title= "Table 2: Regression Results",
+          out="table2.txt")
+
+stargazer(DF2, type = "latex", title= "Table 1: Summary Statistics",
+          out="table1.1.html")
+
+stargazer(lineartest3, type = "latex", title= "Table 2: Regression Results",
+          out="table2.1.html")
+  
+
+library(stargazer)
+{r DF2, results='asis'}
+stargazer::stargazer(DF2,  header=FALSE, type='latex')
+```
+  
+
+
 
 library(readxl)
 

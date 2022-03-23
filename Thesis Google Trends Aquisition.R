@@ -4,7 +4,7 @@ library(gtrendsR)
 library(tidyverse)
 library(lubridate)
 ##Get the rough google trends data for DAILY for over 9months
-get_daily_gtrend <- function(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2017-09-01', to = '2022-02-01') {
+get_daily_gtrend <- function(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2011-08-01', to = '2022-01-31') {
   if (ymd(to) >= floor_date(Sys.Date(), 'month')) {
     to <- floor_date(ymd(to), 'month') - days(1)
     
@@ -58,11 +58,11 @@ get_daily_gtrend <- function(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo 
   return(trend_res)
 }
 
-get_daily_gtrend(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2017-09-01', to = '2022-02-01')
+get_daily_gtrend(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2011-08-01', to = '2022-01-31')
 #plot(gtrendsR::get_daily_gtrend(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2021-12-01', to = '2022-01-22'))
 
 ##saving the data
-output <-get_daily_gtrend(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2017-09-01', to = '2022-02-01')
+output <-get_daily_gtrend(keyword = c('Bitcoin', 'Ethereum', 'Binance'), geo = '', from = '2011-08-01', to = '2022-01-31')
 
 ##Naming columns and creating csv file
 output
@@ -76,10 +76,23 @@ CoinHits <- merge(data,outputsplit[["Ethereum"]], by="Date")
 colnames(CoinHits) <- c('Date','Bitcoin','BitcoinHits', "Binance", "BinanceHits", "Ethereum", "EthereumHits")
 CoinHits<- subset(CoinHits, select = -c(Bitcoin, Binance, Ethereum))
 
-GoogleTrends = data.frame(date = time(CoinHits$Date), BitcoinHits = as.numeric(CoinHits$BitcoinHits), BinanceHits= as.numeric(CoinHits$BinanceHits, EtereumHits= as.numeric(CoinHits$EthereumHits)))
+GoogleTrends = data.frame(date = time(CoinHits$Date), BitcoinHits = as.numeric(CoinHits$BitcoinHits), BinanceHits= as.numeric(CoinHits$BinanceHits), EtereumHits= as.numeric(CoinHits$EthereumHits))
 setDT(GoogleTrends)
 
+GoogleTrends = data.frame(date = as.Date(CoinHits$Date), BitcoinHits = as.numeric(CoinHits$BitcoinHits), BinanceHits= as.numeric(CoinHits$BinanceHits), EtereumHits= as.numeric(CoinHits$EthereumHits))
+setDT(GoogleTrends)
+
+GoogleTrends2 = data.frame(date = as.Date(CoinHits$Date), BitcoinHits = as.numeric(CoinHits$BitcoinHits), BinanceHits= as.numeric(CoinHits$BinanceHits), EtereumHits= as.numeric(CoinHits$EthereumHits))
+setDT(GoogleTrends2)
+
 GoogleTrends[,date := as.yearmon(date)]
+
+as.POSIXlt(GoogleTrends2$date, format = "%Y %U %u")
+GoogleTrends2$yw <- format(GoogleTrends2$date, '%Y-%V')
+
+write.csv(GoogleTrends,"~/Downloads/MonthlyGoogleTrends.csv", row.names = TRUE)
+write.csv(GoogleTrends2,"~/Downloads/WeeklyGoogleTrends.csv", row.names = TRUE)
+
 ##random plotting i saw online but idk if it works with daily
 #plot(gtrendsR::gtrends(keyword = c("Bitcoin","Ethereum","Binance"), geo = "", time = "2021-12-01 2022-01-22"))
 #gtrends(keyword = c("Bitcoin","Ethereum","Binance"), geo = "", time = "2021-12-01 2022-01-22")
