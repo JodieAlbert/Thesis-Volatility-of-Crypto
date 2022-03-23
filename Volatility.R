@@ -26,6 +26,8 @@ colnames(d) <- c("ym", "VBTC")
 #      main = "Bitcoin Volatility")
 
 #create week
+as.POSIXlt(r$date, format = "%Y %U %u")
+
 r$yw <- format(r$date, '%Y-%V')
 
 d2 = r[, sd(r,na.rm=T), by = yw]
@@ -133,6 +135,9 @@ Dpartial2 = d.BNB2[d2, on = .(yw)]
 D_22= d.ETH2[Dpartial2, on = .(yw)]
 Volatilitydata2= d.SP5002[D_22, on = .(yw)]
 class(as.data.frame(Volatilitydata2))
+Volatilitydata3 = d.USD2[Volatilitydata2, on = .(yw)]
+class(as.data.frame(Volatilitydata3))
+write.csv(Volatilitydata3,"~/Downloads/Voldata.csv", row.names = TRUE)
 
 
 Dpartial2 = d2[d.SP5002, on = .(yw)]
