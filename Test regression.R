@@ -1,4 +1,6 @@
+#################################################
 ##Combined test replication dataset
+#################################################
 EPU = read.csv("~/Downloads/WEEKLY TEST REP/Daily_7_Day.csv")
 GOLDVOL = read.csv("~/Downloads/WEEKLY TEST REP/Daily_Close.csv")
 SYS = read.csv("~/Downloads/TEST SYS.csv")

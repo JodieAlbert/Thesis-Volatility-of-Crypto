@@ -1,8 +1,13 @@
+#################################################
+## Regressions without Regulation Data
+#################################################
 rm(list = ls())
 data = read.csv("~/Documents/FinalDataset.csv")
 
 dataequal <- data[data$yw>"2017-44",]
 dataequal <- dataequal[ -c(1) ]
+write.csv(dataequal,"~/Documents/grad school/dataequal.csv", row.names = FALSE)
+dataequal = read.csv("~/Documents/grad school/dataequal.csv")
 
 lineartest <- lm(VBTC ~ Gold + VUSD+ VSP+ VETH+ VBNB+ EPU+ SYS +BitcoinHits+ VIXHits 
                  +BinanceHits + EtereumHits +crisisHits + cyberattackHits + goldpriceHits 

@@ -1,4 +1,6 @@
-#Data
+#################################################
+#Combining Data
+#################################################
 rm(list = ls())
 rm(Gold)
 G1 = read.csv("~/Downloads/Partial2KeywordGoogleTrends.csv")
